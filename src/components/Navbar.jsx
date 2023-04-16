@@ -5,7 +5,7 @@ import LangDropDown from './LangDropDown'
 import { useTranslation } from 'react-i18next'
 
 const Navbar = () => {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
     const state = useSelector(state => state.handleCart)
     return (

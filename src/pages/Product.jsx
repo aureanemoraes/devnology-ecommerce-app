@@ -6,13 +6,18 @@ import { useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
 
 import { Footer, Navbar } from "../components";
+import { useTranslation } from "react-i18next";
 
 const Product = () => {
-  const { id } = useParams();
-  const [product, setProduct] = useState([]);
+  const { t } = useTranslation();
+
+  const { supplier, id } = useParams();
+  const [product, setProduct] = useState(null);
   const [similarProducts, setSimilarProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
+
+  console.log({supplier,id});
 
   const dispatch = useDispatch();
 
@@ -20,22 +25,17 @@ const Product = () => {
     dispatch(addCart(product));
   };
 
+  // products/european_provider/1
   useEffect(() => {
-    const getProduct = async () => {
-      setLoading(true);
-      setLoading2(true);
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-      const data = await response.json();
-      setProduct(data);
-      setLoading(false);
-      const response2 = await fetch(
-        `https://fakestoreapi.com/products/category/${data.category}`
-      );
-      const data2 = await response2.json();
-      setSimilarProducts(data2);
-      setLoading2(false);
-    };
-    getProduct();
+    setLoading(() => true);
+
+    fetch(`http://localhost:8000/api/products/${supplier}/${id}`)
+    .then((response) => response.json())
+    .then((jsonResponse) => { 
+      console.log({jsonResponse});
+      setProduct(() => jsonResponse.data);
+      setLoading(() => false);
+    });
   }, [id]);
 
   const Loading = () => {
@@ -64,12 +64,12 @@ const Product = () => {
   const ShowProduct = () => {
     return (
       <>
-        <div className="container my-5 py-2">
+        {product && <div className="container my-5 py-2">
           <div className="row">
             <div className="col-md-6 col-sm-12 py-3">
               <img
                 className="img-fluid"
-                src={product.image}
+                src={product && product.gallery.length > 0 ? product.gallery[0] : ''}
                 alt={product.title}
                 width="400px"
                 height="400px"
@@ -88,14 +88,14 @@ const Product = () => {
                 className="btn btn-outline-dark"
                 onClick={() => addProduct(product)}
               >
-                Add to Cart
+                {t('addToCart')}
               </button>
               <Link to="/cart" className="btn btn-dark mx-3">
-                Go to Cart
+                {t('goToCart')}
               </Link>
             </div>
           </div>
-        </div>
+        </div>}
       </>
     );
   };
@@ -157,7 +157,7 @@ const Product = () => {
                       className="btn btn-dark m-1"
                       onClick={() => addProduct(item)}
                     >
-                      Add to Cart
+                      {t('addToCart')}
                     </button>
                   </div>
                 </div>
@@ -175,14 +175,6 @@ const Product = () => {
         <div className="row">{loading ? <Loading /> : <ShowProduct />}</div>
         <div className="row my-5 py-5">
           <div className="d-none d-md-block">
-          <h2 className="">You may also Like</h2>
-            <Marquee
-              pauseOnHover={true}
-              pauseOnClick={true}
-              speed={50}
-            >
-              {loading2 ? <Loading2 /> : <ShowSimilarProduct />}
-            </Marquee>
           </div>
         </div>
       </div>

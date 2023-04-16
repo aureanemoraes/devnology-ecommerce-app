@@ -6,7 +6,6 @@ function Home() {
   return (
     <Suspense fallback="...is loading">
       <Navbar/>
-      <Main />
       <Product />
       <Footer />
     </Suspense >

@@ -17,19 +17,19 @@ const LangDropDown = () => {
  
 
   return (
-    <div class="btn-group btn-group-sm">
-      <button type="button" class="btn btn-dark">
+    <div className="btn-group btn-group-sm">
+      <button type="button" className="btn btn-dark">
         { currentLang.nativeName }
       </button>
-      <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="visually-hidden">Toggle Dropdown</span>
+      <button type="button" className="btn btn-dark dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+        <span className="visually-hidden">Toggle Dropdown</span>
       </button>
-      <ul class="dropdown-menu">
+      <ul className="dropdown-menu">
 
       {langs.map((lang) => 
         (<li>
           <button
-            class="dropdown-item"
+            className="dropdown-item"
             key={lang.code}
             type="button"
             onClick={() => handleLanguageChange(lang)}

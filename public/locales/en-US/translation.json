@@ -1,3 +1,10 @@
 {
-    "home": "Home"
+    "home": "Home",
+    "previous": "Previous",
+    "next": "Next",
+    "firstPage": "First Page",
+    "lastPage": "Last Page",
+    "details": "Details",
+    "addToCart": "Add to cart",
+    "goToCart": "Go to cart"
 }
