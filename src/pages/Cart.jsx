@@ -1,12 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { Footer, Navbar } from "../components";
 import { useSelector, useDispatch } from "react-redux";
 import { addCart, delCart } from "../redux/action";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Cart = () => {
   const state = useSelector((state) => state.handleCart);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const [ token, setToken ] = useState(() => {
+      // eslint-disable-next-line
+      const token = globalThis?.sessionStorage?.getItem('token');
+      return token || null;
+  });
+
+
+  const handleFinishOrder = () => {
+    if (!token)
+      navigate('/login');
+
+    const data = {
+      items: state.map(item => ({ name: item.name, id: item.id, supplier: item.supplier }))
+    };
+    fetch(`http://localhost:8000/orders/resume`, {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'content-type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(jsonResponse => {
+        // const { data } = jsonResponse;
+        console.log(jsonResponse);
+
+        // // eslint-disable-next-line
+        // globalThis?.sessionStorage.setItem('token', data.token);
+
+        // // eslint-disable-next-line
+        // globalThis?.sessionStorage.setItem('user', JSON.stringify(data.user));
+
+        // navigate("/cart");
+      });
+  }
 
   const EmptyCart = () => {
     return (
@@ -49,7 +90,7 @@ const Cart = () => {
               <div className="col-md-8">
                 <div className="card mb-4">
                   <div className="card-header py-3">
-                    <h5 className="mb-0">Item List</h5>
+                    <h5 className="mb-0">{t('itemList')}</h5>
                   </div>
                   <div className="card-body">
                     {state.map((item) => {
@@ -62,9 +103,9 @@ const Cart = () => {
                                 data-mdb-ripple-color="light"
                               >
                                 <img
-                                  src={item.image}
+                                  src={item.gallery[0]}
                                   // className="w-100"
-                                  alt={item.title}
+                                  alt={item.name}
                                   width={100}
                                   height={75}
                                 />
@@ -73,7 +114,7 @@ const Cart = () => {
 
                             <div className="col-lg-5 col-md-6">
                               <p>
-                                <strong>{item.title}</strong>
+                                <strong>{item.name}</strong>
                               </p>
                               {/* <p>Color: blue</p>
                               <p>Size: M</p> */}
@@ -124,33 +165,33 @@ const Cart = () => {
               <div className="col-md-4">
                 <div className="card mb-4">
                   <div className="card-header py-3 bg-light">
-                    <h5 className="mb-0">Order Summary</h5>
+                    <h5 className="mb-0">{t('orderSummary')}</h5>
                   </div>
                   <div className="card-body">
                     <ul className="list-group list-group-flush">
                       <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                        Products ({totalItems})<span>${Math.round(subtotal)}</span>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center px-0">
-                        Shipping
-                        <span>${shipping}</span>
+                        {t('products')} ({totalItems})<span>${Math.round(subtotal)}</span>
                       </li>
                       <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                         <div>
-                          <strong>Total amount</strong>
+                          <strong>{t('totalAmount')}</strong>
                         </div>
                         <span>
-                          <strong>${Math.round(subtotal + shipping)}</strong>
+                          <strong>${Math.round(subtotal)}</strong>
                         </span>
                       </li>
                     </ul>
 
-                    <Link
+                    <button className="btn btn-dark btn-lg btn-block" onClick={handleFinishOrder}>
+                      {t('buy')}
+                    </button>
+
+                    {/* <Link
                       to="/checkout"
                       className="btn btn-dark btn-lg btn-block"
                     >
-                      Go to checkout
-                    </Link>
+                      {t('buy')}
+                    </Link> */}
                   </div>
                 </div>
               </div>
@@ -165,7 +206,7 @@ const Cart = () => {
     <>
       <Navbar />
       <div className="container my-3 py-3">
-        <h1 className="text-center">Cart</h1>
+        <h1 className="text-center">{t('cart')}</h1>
         <hr />
         {state.length > 0 ? <ShowCart /> : <EmptyCart />}
       </div>
