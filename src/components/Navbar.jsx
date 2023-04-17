@@ -60,6 +60,7 @@ const Navbar = () => {
                         {!user && <NavLink to="/login" className="btn btn-outline-dark m-2"><i className="fa fa-sign-in-alt mr-1"></i> {t('login')}</NavLink>}
                         {!user && <NavLink to="/register" className="btn btn-outline-dark m-2"><i className="fa fa-user-plus mr-1"></i> {t('register')}</NavLink>}
                         <NavLink to="/cart" className="btn btn-outline-dark m-2"><i className="fa fa-cart-shopping mr-1"></i> {t('cart')} ({state.length}) </NavLink>
+                        {user && <NavLink to="/history" className="btn btn-outline-dark m-2">{t('orderHistory')}</NavLink>}
                         {user && <button className="btn btn-outline-dark" onClick={handleLogout} >{t('logout')}</button>}
                     </div>
                 </div>

@@ -25,27 +25,30 @@ const Cart = () => {
     const data = {
       items: state.map(item => ({ name: item.name, id: item.id, supplier: item.supplier }))
     };
-    fetch(`http://localhost:8000/orders/resume`, {
+
+    fetch(`http://localhost:8000/api/orders/resume`, {
         method: 'POST',
         headers: {
+          'Authorization': 'Bearer ' + token,
           'accept': 'application/json',
           'content-type': 'application/json',
-          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(data)
       })
       .then(response => response.json())
       .then(jsonResponse => {
-        // const { data } = jsonResponse;
-        console.log(jsonResponse);
+        const { data } = jsonResponse;
 
-        // // eslint-disable-next-line
-        // globalThis?.sessionStorage.setItem('token', data.token);
+        // eslint-disable-next-line
+        globalThis?.sessionStorage.setItem('resume_id', data.resume_id);
 
-        // // eslint-disable-next-line
-        // globalThis?.sessionStorage.setItem('user', JSON.stringify(data.user));
+        // eslint-disable-next-line
+        globalThis?.sessionStorage.setItem('resume_info', JSON.stringify(data.resume_info));
 
-        // navigate("/cart");
+        navigate("/checkout");
+      })
+      .catch(error => {
+        console.log(error);
       });
   }
 

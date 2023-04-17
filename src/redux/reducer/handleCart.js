@@ -24,6 +24,9 @@ const handleCart = (state=cart, action) =>{
             }
             break;
 
+        case "CLEAR":
+            return [];
+            break;
         default:
             return state
             break;

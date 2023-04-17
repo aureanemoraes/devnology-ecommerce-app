@@ -26,5 +26,8 @@
     "buy": "Buy",
     "orderSummary": "Order summary",
     "itemList": "Item list",
-    "totalAmount": "Total amount"
+    "totalAmount": "Total amount",
+    "finishBuy": "Finish buy",
+    "orderHistory": "Order history",
+    "orders": "Orders"
 }

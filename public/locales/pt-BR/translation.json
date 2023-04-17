@@ -26,5 +26,8 @@
     "buy": "Comprar",
     "orderSummary": "Resumo do pedido",
     "itemList": "Lista de itens",
-    "totalAmount": "Valor total"
+    "totalAmount": "Valor total",
+    "finishBuy": "Finalizar compra",
+    "orderHistory": "Histórico de pedidos",
+    "orders": "Pedidos"
 }
